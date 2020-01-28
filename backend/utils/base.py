@@ -94,4 +94,3 @@ def jwt_required():
 def get_jwt_header(request):
     # so we can mock this easier
     return request.headers.get("Authorization")
-

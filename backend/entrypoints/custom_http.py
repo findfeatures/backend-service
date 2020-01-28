@@ -2,17 +2,13 @@ import json
 from functools import partial
 from types import FunctionType
 
-from backend.exceptions import (
-    AuthorizationHeaderMissing,
-    UnauthorizedRequest,
-)
+from backend.exceptions import AuthorizationHeaderMissing, UnauthorizedRequest
 from backend.exceptions.stripe import UnableToCreateCheckoutSession
 from backend.exceptions.users import (
     UserAlreadyExists,
     UserNotAuthorised,
     UserNotVerified,
 )
-
 from marshmallow import ValidationError
 from nameko import config
 from nameko.exceptions import BadRequest, safe_for_serialization
@@ -61,16 +57,15 @@ class CustomHttpEntrypoint(HttpRequestHandler):
             try:
                 auth_token = self._get_auth_token_from_header(request)
                 request.auth_token = auth_token
-            except (
-                UnauthorizedRequest,
-                AuthorizationHeaderMissing,
-            ) as exc:
+            except (UnauthorizedRequest, AuthorizationHeaderMissing) as exc:
                 return self.response_from_exception(exc)
 
         return super().handle_request(request)
 
     def response_from_result(self, *args, **kwargs):
-        response = super(CustomHttpEntrypoint, self).response_from_result(*args, **kwargs)
+        response = super(CustomHttpEntrypoint, self).response_from_result(
+            *args, **kwargs
+        )
         response = self._add_cors(response)
         return response
 

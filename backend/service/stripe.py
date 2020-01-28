@@ -1,20 +1,22 @@
+import json
 import logging
 import time
 
 import stripe
-import json
+from backend.dependencies.database.collections.audit_logs import AuditLogType
 from backend.dependencies.database.models import StripeSessionCompletedStatusEnum
 from backend.dependencies.redis.provider import NonBlockingLock
 from backend.entrypoints import stripe as nameko_stripe
+from backend.entrypoints.custom_http import http
 from backend.exceptions.projects import CheckoutSessionAlreadyExists
 from backend.exceptions.stripe import UnableToCreateCheckoutSession
-from backend.service.base import ServiceMixin
-from sqlalchemy.orm import exc as orm_exc
-from backend.dependencies.database.collections.audit_logs import AuditLogType
-from backend.utils.base import jwt_required
-from werkzeug import Response
 from backend.schemas import stripe as stripe_schemas
-from backend.entrypoints.custom_http import http
+from backend.service.base import ServiceMixin
+from backend.utils.base import jwt_required
+from sqlalchemy.orm import exc as orm_exc
+from werkzeug import Response
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -94,7 +96,7 @@ class StripeServiceMixin(ServiceMixin):
         )
 
         project_name = checkout_session_details["project_data"]["name"]
-        user_id = jwt_data['user_id']
+        user_id = jwt_data["user_id"]
 
         project_id = self.storage.projects.create_project(user_id, project_name)
 
@@ -108,18 +110,18 @@ class StripeServiceMixin(ServiceMixin):
 
         try:
             session = self.stripe.checkout.Session.create(
-                customer_email=checkout_session_details["email"],
+                customer_email=jwt_data["email"],
                 payment_method_types=["card"],
-                subscription_data={"items": [{"plan": checkout_session_details["plan"]}]},
+                subscription_data={
+                    "items": [{"plan": checkout_session_details["plan"]}]
+                },
                 success_url=checkout_session_details["success_url"]
                 + "?session_id={CHECKOUT_SESSION_ID}",
                 cancel_url=checkout_session_details["cancel_url"],
             )
 
             # raises CheckoutSessionAlreadyExists if project already has session id
-            self.storage.projects.set_checkout_session_id(
-                project_id, session.id
-            )
+            self.storage.projects.set_checkout_session_id(project_id, session.id)
 
         except (stripe.error.StripeError, CheckoutSessionAlreadyExists) as e:
             logger.error(e)

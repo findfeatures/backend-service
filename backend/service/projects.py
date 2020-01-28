@@ -1,16 +1,17 @@
-import logging
 import json
-from backend.service.base import ServiceMixin
-from backend.utils.base import jwt_required
+import logging
+
 from backend.entrypoints.custom_http import http
 from backend.schemas import projects as projects_schemas
+from backend.service.base import ServiceMixin
+from backend.utils.base import jwt_required
 from werkzeug import Response
+
 
 logger = logging.getLogger(__name__)
 
 
 class ProjectsServiceMixin(ServiceMixin):
-
     @jwt_required()
     @http("GET", "/v1/projects")
     def get_projects(self, request):
@@ -21,13 +22,20 @@ class ProjectsServiceMixin(ServiceMixin):
         projects = self.storage.projects.get_all_verified(jwt_data["user_id"])
 
         return Response(
-            projects_schemas.GetProjectsResponse().dumps({"projects": [
-            {
-                "id": project["id"],
-                "name": project["name"],
-                "created_datetime_utc": project["created_datetime_utc"].isoformat(),
-            } for project in projects
-        ]}),
+            projects_schemas.GetProjectsResponse().dumps(
+                {
+                    "projects": [
+                        {
+                            "id": project["id"],
+                            "name": project["name"],
+                            "created_datetime_utc": project[
+                                "created_datetime_utc"
+                            ].isoformat(),
+                        }
+                        for project in projects
+                    ]
+                }
+            ),
             mimetype="application/json",
         )
 
@@ -41,12 +49,12 @@ class ProjectsServiceMixin(ServiceMixin):
             json.loads(request.data)
         )
 
-        projects = self.storage.projects.get_all_verified(jwt_data['user_id'])
+        projects = self.storage.projects.get_all_verified(jwt_data["user_id"])
 
         is_project_created = False
         for project in projects:
-            if project["checkout_session_id"] == request_data['session_id']:
-                return is_project_created
+            if project["checkout_session_id"] == request_data["session_id"]:
+                is_project_created = True
 
         return Response(
             projects_schemas.GetProjectSetupCompletedResponse().dumps(

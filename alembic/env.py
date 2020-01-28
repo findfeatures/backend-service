@@ -1,8 +1,8 @@
 import os
 from logging.config import fileConfig
 
-from backend.dependencies.database.models import Base
 from alembic import context
+from backend.dependencies.database.models import Base
 from sqlalchemy import create_engine
 
 

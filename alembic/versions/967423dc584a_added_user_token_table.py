@@ -30,7 +30,7 @@ def upgrade():
         ),
         sa.Column(
             "token",
-            sqlalchemy_utils.types.password.PasswordType(length=1024),
+            sqlalchemy_utils.types.password.PasswordType(max_length=1024),
             nullable=False,
         ),
         sa.Column("user_id", sa.Integer(), nullable=True),

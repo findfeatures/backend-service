@@ -1,3 +1,4 @@
+from backend.dependencies.database.collections.audit_logs import AuditLogs
 from backend.dependencies.database.collections.projects import Projects
 from backend.dependencies.database.collections.stripe_sessions_completed import (
     StripeSessionsCompleted,
@@ -5,7 +6,6 @@ from backend.dependencies.database.collections.stripe_sessions_completed import 
 from backend.dependencies.database.collections.user_notifications import (
     UserNotifications,
 )
-from backend.dependencies.database.collections.audit_logs import AuditLogs
 from backend.dependencies.database.collections.user_tokens import UserTokens
 from backend.dependencies.database.collections.users import Users
 from backend.dependencies.database.models import Base

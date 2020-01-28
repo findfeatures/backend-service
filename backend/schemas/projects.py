@@ -17,7 +17,3 @@ class GetProjectSetupCompletedRequest(Schema):
 
 class GetProjectSetupCompletedResponse(Schema):
     completed = fields.Boolean(required=True)
-
-
-class CreateProjectRequest(Schema):
-    name = fields.String(required=True)

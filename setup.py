@@ -33,7 +33,7 @@ setuptools.setup(
         "sendgrid==6.1.1",
         "walrus==0.8.0",
         "munch==2.5.0",
-        "stripe==2.42.0"
+        "stripe==2.42.0",
     ],
     extras_require={
         "dev": [
