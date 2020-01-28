@@ -1,0 +1,2 @@
+class UnableToCreateCheckoutSession(Exception):
+    pass

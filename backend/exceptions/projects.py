@@ -1,0 +1,2 @@
+class CheckoutSessionAlreadyExists(Exception):
+    pass
