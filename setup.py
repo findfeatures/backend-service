@@ -16,7 +16,7 @@ setuptools.setup(
     packages=setuptools.find_packages(exclude=["tests", "alembic", "build", "dist"]),
     zip_safe=True,
     install_requires=[
-        "nameko==3.0.0-rc6",
+        "nameko==3.0.0rc10",
         "nameko-sentry==1.0.0",
         "ddtrace==0.27.1",
         "nameko-sqlalchemy==1.5.0",
