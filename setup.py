@@ -29,7 +29,7 @@ setuptools.setup(
         "passlib==1.7.2",
         "marshmallow==3.0.1",
         "alembic==1.2.1",
-        "PyJWT==1.7.1",
+        "PyJWT==2.4.0",
         "sendgrid==6.1.1",
         "walrus==0.8.0",
         "munch==2.5.0",
